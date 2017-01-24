@@ -8,7 +8,7 @@ $host = '127.0.0.1'; //alias лучше не использовать, не на
 $user = 'low_access_user'; //попросим админа дать нам юзера только с правами на чтение
 $pw = 'pwd_for_low_access';
 $db = 'database';
-/* CONFIGURATION END */
+/** CONFIGURATION END */
 
 /**
  * @param mysqli $mysqli
