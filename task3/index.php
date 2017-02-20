@@ -22,20 +22,22 @@ $post1 = \b2b\Entities\Post::from([
 $post2 = \b2b\Entities\Post::from([
     'text' => '456'
 ]);
+$storage = new \b2b\Adapters\Storage([]);
+$postMapper = new \b2b\Mappers\Post($storage);
+$userMapper = new \b2b\Mappers\User($storage);
+//Каждый из пользователей написал пост
+$post1->setAuthor($user);
+$post2->setAuthor($dummy);
+$postMapper->save($post1);
+$postMapper->save($post2);
+//Смена автора у поста
+$post1->setAuthor($dummy);
+$postMapper->save($post1);
 
-$user->addPost($post1);
-$user->addPost($post2);
+//Поиск по постам пользователя
+$foundPosts = $postMapper->findByAuthor($dummy);
 
-$post2->changeAuthor($dummy);
-$storage = new \b2b\Adapters\Storage([
-    $post1->getId() => $post1,
-    $post2->getId() => $post2
-]);
-
-$mapper = new \b2b\Mappers\Post($storage);
-$foundPosts = $mapper->findByAuthor($user);
-
-echo 'User: ' . $user->getName() . ' Posts.' . PHP_EOL;
+echo 'User: ' . $dummy->getName() . ' Posts.' . PHP_EOL;
 foreach ($foundPosts as $foundPost) {
     echo $foundPost->getId() . ' ';
 }

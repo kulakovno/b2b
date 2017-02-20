@@ -23,14 +23,7 @@ interface PostInterface
 
     /**
      * @param UserInterface $author
-     * @return mixed
+     * @return PostInterface
      */
-    public function setAuthor(UserInterface $author);
-
-    /**
-     * @param UserInterface $author
-     * @return mixed
-     */
-    public function changeAuthor(UserInterface $author);
-
+    public function setAuthor(UserInterface $author): PostInterface;
 }

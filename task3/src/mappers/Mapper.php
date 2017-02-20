@@ -14,6 +14,9 @@ use b2b\Entities\EntityInterface;
 
 class Mapper implements MapperInterface
 {
+    /**
+     * @var AdapterInterface
+     */
     protected $adapter;
 
     /**

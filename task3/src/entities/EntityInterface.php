@@ -18,7 +18,7 @@ interface EntityInterface
     public static function from($params);
 
     /**
-     * @return mixed
+     * @return array
      */
-    public function asArray();
+    public function asArray() : array;
 }

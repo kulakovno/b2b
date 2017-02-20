@@ -9,9 +9,10 @@
 namespace b2b\Mappers;
 
 
+use b2b\Entities\PostInterface;
 use b2b\Entities\UserInterface;
 
-class Post extends Mapper
+class Post extends Mapper implements PostMapperInterface
 {
     /**
      * @param UserInterface $author
@@ -23,4 +24,28 @@ class Post extends Mapper
 
         return $found;
     }
+
+    /**
+     * @param PostInterface $post
+     * @return bool
+     */
+    public function save(PostInterface $post) : bool
+    {
+        $this->adapter->add($post->getId(), $post);
+        echo 'User: ' . $post->getAuthor()->getName() . '. Post ' . $post->getId() . ' Added. ' . PHP_EOL;
+        return true;
+    }
+
+    /**
+     * @param PostInterface $post
+     * @return bool
+     */
+    public function delete(PostInterface $post) : bool
+    {
+        $this->adapter->remove($post->getId());
+        echo 'User: ' . $post->getAuthor()->getName() . '. Post ' . $post->getId() . ' Removed. ' . PHP_EOL;
+        return true;
+    }
+
+
 }

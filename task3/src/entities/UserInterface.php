@@ -11,20 +11,9 @@ namespace b2b\Entities;
 
 interface UserInterface
 {
+   
     /**
-     * @param PostInterface $post
-     * @return mixed
+     * @return string
      */
-    public function addPost(PostInterface $post);
-
-    /**
-     * @param PostInterface $post
-     * @return mixed
-     */
-    public function removePost(PostInterface $post);
-
-    /**
-     * @return mixed
-     */
-    public function getName();
+    public function getName() : string;
 }

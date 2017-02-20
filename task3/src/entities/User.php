@@ -25,28 +25,9 @@ class User extends Entity implements UserInterface, EntityInterface
     }
 
     /**
-     * @param PostInterface $post
-     */
-    public function addPost(PostInterface $post)
-    {
-        $this->posts[$post->getId()] = $post;
-        $post->setAuthor($this);
-        echo 'User: ' . $this->name . '. Post ' . $post->getId() . ' Added. ' . PHP_EOL;
-    }
-
-    /**
-     * @param PostInterface $post
-     */
-    public function removePost(PostInterface $post)
-    {
-        unset($this->posts[$post->getId()]);
-        echo 'User: ' . $this->name . '. Post ' . $post->getId() . ' Removed. ' . PHP_EOL;
-    }
-
-    /**
      * @return string
      */
-    public function getName()
+    public function getName() : string 
     {
         return $this->name;
     }

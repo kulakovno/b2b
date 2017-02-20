@@ -44,28 +44,20 @@ class Post extends Entity implements PostInterface, EntityInterface
 
     /**
      * @param UserInterface $author
-     * @return UserInterface
+     * @return PostInterface
      */
-    public function setAuthor(UserInterface $author)
+    public function setAuthor(UserInterface $author) : PostInterface
     {
-        return $this->author = $author;
-    }
-
-    /**
-     * @param UserInterface $author
-     */
-    public function changeAuthor(UserInterface $author)
-    {
-        $this->getAuthor()->removePost($this);
         $this->author = $author;
-        $author->addPost($this);
+        echo 'Post ' . $this->getId() . ' author changed to ' . $author->getName() . PHP_EOL;
+        return $this;
     }
 
     /**
      * @param $params
-     * @return Post
+     * @return PostInterface
      */
-    public static function from($params): Post
+    public static function from($params): PostInterface
     {
         return new self($params['text']);
     }
@@ -73,7 +65,7 @@ class Post extends Entity implements PostInterface, EntityInterface
     /**
      * @return array
      */
-    public function asArray()
+    public function asArray() : array
     {
         return [
             'id' => $this->id,

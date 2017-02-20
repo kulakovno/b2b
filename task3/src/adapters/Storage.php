@@ -52,5 +52,22 @@ class Storage implements AdapterInterface
         return $result;
     }
 
+    /**
+     * @param $name
+     * @param $data
+     * @return bool
+     */
+    public function add($name, $data) : bool
+    {
+        $this->data[$name] = $data;
+        return true;
+    }
+
+    public function remove($name) : bool
+    {
+        unset($this->data[$name]);
+        return true;
+    }
+
 
 }
