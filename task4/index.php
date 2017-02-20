@@ -11,30 +11,25 @@ $db = 'database';
 /** CONFIGURATION END */
 
 /**
- * @param mysqli $mysqli
+ * @param PDO $pdo
  * @param string $ids
  * @return mixed
  */
-function loadUsersData(string $ids, $mysqli)
+function loadUsersData(string $ids, $pdo)
 {
     $data = [];
     $ids = explode(',', $ids);
+    if (count($ids) < 1) {
+        return $data;
+    }
     /**
-     * id может прийти какой угодно, в худшем случае мы словим empty set.
-     * Заодно от инъекции избавились.
+     * PDO bind.
      */
-    $query = $mysqli->prepare('SELECT * FROM users WHERE id = ?');
-
-    foreach ($ids as $uid) {
-        $query->bind_param('s', $uid);
-        $query->execute();
-        $result = $query->get_result();
-        /**
-         * Мы заранее преполагаем, что строка с юзером одна.
-         * While не нужен.
-         */
-        $obj = $result->fetch_object();
-        $data[$obj->id] = $obj->username;
+    $in = str_repeat('?,', count($ids) - 1) . '?';
+    $query = $pdo->prepare("SELECT * FROM users WHERE id IN ($in)");
+    $query->execute($ids);
+    while ($user = $query->fetchObject()) {
+        $data[$user->id] = $user->username;
     }
 
     return $data;
@@ -47,6 +42,7 @@ function loadUsersData(string $ids, $mysqli)
  */
 function render($data)
 {
+
     foreach ($data as $uid => $name) {
         echo <<<HTML
    <a href="show_user.php?id=$uid">$name</a>
@@ -57,13 +53,19 @@ HTML;
 /**
  * Подключимся к бд один раз, вместо использования connect в цикле, в этом просто нет смысла.
  */
-$connection = new mysqli($host, $user, $pw, $db);
-// Как правило, в $_GET['user_ids'] должна приходить строка
+$dsn = "mysql:dbname=$db;host=$host";
+try {
+    $connection = new PDO($dsn, $user, $pw);
+    $connection->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+    // Как правило, в $_GET['user_ids'] должна приходить строка
 // с номерами пользователей через запятую, например: 1,2,17,48
 
-/**
- * Добавим проверку на пустое значение user_ids.
- */
-$data = loadUsersData($_GET['user_ids'] ?? '', $connection);
-$connection->close();
-render($data);
+    /**
+     * Добавим проверку на пустое значение user_ids.
+     */
+    $data = loadUsersData($_GET['user_ids'] ?? '', $connection);
+    render($data);
+} catch (PDOException $e) {
+    //log $e;
+    echo 'Fail: check logs';
+}
